@@ -6,19 +6,119 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>my_promises</title>
-    <script src="js/my_promises.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.bootcss.com/qs/6.5.1/qs.min.js"></script>
+    <!-- <script src="js/my_promises.js"></script> -->
 </head>
 
 <body>
     <script>
-        let getdata = new MyPromise((resolve, reject) => {
-            setTimeout(() => {
-                resolve('ok')
-            }, 0)
-        })
-        getdata.then(res => {
+
+        let token, name;
+        // function getToken(){
+        //     setTimeout(()=>{
+        //         token='token'
+        //         getName(token)
+        //     },200)
+        // }
+        // function getName(token){
+        //     setTimeout(()=>{
+        //         if(token){
+        //  name= '小明'
+        //             getAge(name)
+        //         }
+        //     },200)
+        // }
+        // function getAge(name){
+        //     setTimeout(()=>{
+        //         if(name){
+        //             return '60'
+        //         }
+        //     },200)
+        // }
+
+        let getToken = function () {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    resolve('token')
+                }, 1000)
+            })
+        }
+
+        let getName = function (token) {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    resolve('小明')
+                }, 500)
+            })
+        }
+        let getAge = function (name) {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    resolve('60')
+                }, 600)
+            })
+        }
+        Promise.race([getToken(), getName('token'), getAge('token')]).then(res => {
             console.log(res)
+        }).catch(err => {
+            console.error(err, 'err')
         })
+        // getToken().then(res => {
+        //     console.log(res)
+        //     return getName(res)
+
+        // }).then(res => {
+        //     console.log(res)
+        //     return getAge()
+        // }).then(res => {
+        //     console.log(res)
+        // }).catch(err => {
+        //     console.log(err)
+        // })
+        // getAge().then(res=>{
+        //     console.log(res,'res')
+        // },err=>{
+        //     console.error(err,'err')
+        // })
+        // let getdata = new MyPromise((resolve, reject) => {
+        //     setTimeout(() => {
+        //         resolve('ok')
+        //     }, 0)
+        // })
+        // getdata.then(res => {
+        //     console.log(res)
+        // })
+
+
+        // url,data,method
+        const $http = (url, data, method) => {
+            method = method.toUpperCase();
+            const config = {
+                method, url
+            }
+            if (['GET', 'DELETE'].includes(method)) { config.params = data }
+            else { config.data = Qs.stringify(data) }
+            return new Promise((resolve, reject) => {
+                axios(config).then(response => {
+                    let code = response.data.code
+                    if (code == 200) {
+                        resolve(response.data)
+                    }else{
+                        reject(response.data)
+                    }
+                }).catch(err => {
+                    reject(err)
+                })
+            })
+        }
+      
+        // url:'http://api-test-2.qiumeiapp.com:8094/'
+        // method:'post'
+        // data:{
+        //     loginName:'',
+        //     password:''
+        // }
     </script>
 
 </body>
