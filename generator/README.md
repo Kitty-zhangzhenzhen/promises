@@ -13,8 +13,8 @@ console.log(fn.next())//{ value: 3, done: false }
 
 ```
 当我们执行let fn = foo(1);这行代码时方法内代码并没有执行，只是返回了一个内部指针，这个可能不好理解，那遍历器可能就好理解多了。  
-方法如果需要执行必须调用.next()
-generator与一般函数不同的是声明方式，function *，可以yield多次，那我们有哪些使用场景呢？  
+方法如果需要执行必须调用.next(),每次调用.next()就会返回一个对象,value是yield后面方法执行结果，done表示该方法遍历是否已结束。
+generator与一般函数不同的是声明方式，function *，可以yield多次，那有哪些使用场景呢？  
 就拿我们常用的接口请求来说吧，一次需要执行多个接口的时候，可写成如下方式  
 ```python
 function* initPage(){
